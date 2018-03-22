@@ -1,0 +1,42 @@
+import requests
+import json
+import time
+import random
+import pymysql.cursors
+import csv
+i=0
+uid = 1669879400
+#def gethtml(url):
+page_number = 1
+headers = {"User-Agent":"spider"}
+url = "https://m.weibo.cn/api/container/getSecond?containerid=100505"+str(uid)+"_-_FANS&page="+str(page_number)
+def getwebinfo(url):
+    req = requests.get(url, headers = headers)
+    jsondata = req.text
+    raw_data = json.loads(jsondata)
+    raw_data = raw_data["data"]
+    return raw_data
+raw_data = getwebinfo(url)
+b = []
+max_page = 100
+while (page_number <= max_page):
+    raw_data = getwebinfo(url)
+    raw_data = raw_data['cards']
+    for tmp in raw_data:
+        following_id = tmp['user']['id']
+        following_name = tmp['user']['screen_name']
+        following_url = tmp['user']['profile_url']
+        follower_count = tmp['user']['followers_count']
+        follow_count = tmp['user']['follow_count']
+        a = [following_id,following_name,following_url,follower_count,follow_count]
+        b.append(a)
+        i+=1
+        print(i)
+    page_number += 1
+with open("test.csv","w") as csvfile: 
+    writer = csv.writer(csvfile)
+
+    #先写入columns_name
+    writer.writerow(["用户id","用户昵称","用户网址","粉丝数","关注数"])
+        #写入多行用writerows
+    writer.writerows(b)
