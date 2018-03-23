@@ -1,0 +1,36 @@
+import requests
+import json
+import time
+import random
+import pymysql.cursors
+# input search objection
+uid = 1669879400#input("请输入想要建立社交网络的用户或者机构：")
+
+page_number = 1
+
+'''
+if search_user in user_database:
+    pass
+else:
+    pass(另外做一套)
+'''
+#userid_list = []
+url = "https://m.weibo.cn/api/container/getIndex?containerid=231051_-_fans_-_" + str(uid) + "&type=uid&value=" + str(uid) +"&since_id=" + str(page_number)
+#def gethtml(url):
+req = requests.get(url)
+jsondata = req.text
+raw_data = json.loads(jsondata)
+
+raw_data = raw_data["data"]
+raw_data = raw_data['cards']
+for i in range(len(raw_data[0]['card_group'])):
+    user_info = raw_data[0]['card_group'][i]
+    following_id = user_info['user']['id']
+    following_name = user_info['user']['screen_name']
+    following_url = user_info['user']['profile_url']
+    follower_count = user_info['user']['followers_count']
+    follow_count = user_info['user']['follow_count']
+    interaction_state = int(user_info['user']['follow_me'])
+    print(following_id,following_name,following_url,follower_count,follow_count,interaction_state)
+    print(i)
+

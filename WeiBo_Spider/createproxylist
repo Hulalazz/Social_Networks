@@ -1,0 +1,25 @@
+def getproxy(num):
+        import re
+        import requests
+
+        #get html text
+        proxy_list = []
+        headers = {"User-Agent":"spider"}
+        url = "http://www.xicidaili.com/wn"+'/'+str(num)
+        print(url)
+        raw_html = requests.get("http://www.xicidaili.com/wn",headers=headers)
+
+        #find proxy id and port
+        clear_op = re.compile(r'((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))')
+        for tmp in clear_op.finditer(raw_html.text):
+            proxy_list.append(tmp.group())
+        port_list = re.findall(r'(?<=<td>)\d{,5}(?=</td>)',raw_html.text)
+
+        #get id list
+        proxy_list = list(map(lambda x: 'https://'+x[0]+':'+x[1], zip(proxy_list,port_list)))
+        return proxy_list
+
+if __name__== '__main__':
+
+    print(getproxy(num=3))
+

@@ -1,0 +1,50 @@
+
+from lxml import etree
+import requests
+import re
+import sys
+# import weibo_cookie
+import random
+import time
+
+
+headers = {"User-Agent": "spider"}
+"""
+#get proxy
+def getproxy(num):
+    import re
+    import requests
+
+    # get html text
+    proxy_list = []
+
+    url = "http://www.xicidaili.com/wn" + '/' + str(num)
+    raw_html = requests.get("http://www.xicidaili.com/wn", headers=headers)
+
+    # find proxy id and port
+    clear_op = re.compile(r'((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))')
+    for tmp in clear_op.finditer(raw_html.text):
+        proxy_list.append(tmp.group())
+    port_list = re.findall(r'(?<=<td>)\d{,5}(?=</td>)', raw_html.text)
+
+    # get id list
+    proxy_list = list(map(lambda x: 'https://' + x[0] + ':' + x[1], zip(proxy_list, port_list)))
+    return proxy_list
+"""
+# url --> html
+def findHtml(url):
+    #proxies = random.choice(getproxy(1))
+    #proxies = {'https':proxies}
+    html_text = requests.get(url, headers=headers).text
+    return html_text
+
+
+# count the pages, and return a list
+def findPage(url):
+   pass
+
+# find this page id
+if __name__=='__main__':
+    print(findHtml("https://weibo.com/p/1005056067343244/home?from=page_100505&mod=TAB&is_all=1#place"))
+
+
